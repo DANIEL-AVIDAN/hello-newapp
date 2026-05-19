@@ -1,0 +1,4 @@
+name: null-workflow
+
+on:
+  workflow_dispatch:
