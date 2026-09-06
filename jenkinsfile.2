@@ -17,3 +17,13 @@
                 }
             }
         }
+
+
+
+        stage('build') {
+            container('docker') {
+              echo "Building docker image..."
+              dockerImage = docker.build("danielavidan/${appname}:${apptag}")
+
+            }
+        } 
