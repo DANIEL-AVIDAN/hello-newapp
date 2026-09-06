@@ -9,7 +9,8 @@ podTemplate(containers: [
   ]), 
   volumes: [
     emptyDirVolume(mountPath: '/var/lib/docker', memory: false) // Q: Why do we need this volume?
-  ]){
+  ]
+  {
     node(POD_LABEL) {
         stage('chackout') {
             container('jnlp') {
