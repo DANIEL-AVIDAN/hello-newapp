@@ -5,7 +5,7 @@ def apptag = "${env.BUILD_NUMBER}"
 
 podTemplate(containers: [
       containerTemplate(name: 'jnlp', image: 'jenkins/inbound-agent', ttyEnabled: true),
-      containerTemplate(name: 'docker', image: 'gcr.io/kaniko-project/executor:v1.23.0-debug', command: '/busybox/cat', ttyEnabled: true)
+      containerTemplate(name: 'docker', image: 'docker:dind', command: 'cat', ttyEnabled: true, privileged: true)
   ])
   {
     node(POD_LABEL) {
@@ -16,12 +16,12 @@ podTemplate(containers: [
           }
         } // end chackout
 
-        stage('Hello') {
+        stage('build') {
             container('docker') {
               echo "Building docker image..."
               sh "echo docker push $appimage"
             }
-        } //end hello
+        } //end build
     }
 }
 
