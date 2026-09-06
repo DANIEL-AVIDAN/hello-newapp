@@ -5,7 +5,8 @@ def apptag = "${env.BUILD_NUMBER}"
 
 podTemplate(containers: [
       containerTemplate(name: 'jnlp', image: 'jenkins/inbound-agent', ttyEnabled: true),
-      containerTemplate(name: 'docker', image: 'docker:dind', ttyEnabled: true, privileged: true)
+      containerTemplate(name: 'docker', image: 'docker:dind', ttyEnabled: true, privileged: true),
+      containerTemplate(name: 'trivy', image: 'aquasec/trivy:latest', command: 'cat',ttyEnabled: true)
   ],
       // <<< שינוי 2: הוספנו volume ל-Docker daemon
     volumes: [
@@ -36,7 +37,14 @@ podTemplate(containers: [
 
                 codeScan: {
                     stage('codeScan') {
-                        echo "Scanning the code..."
+                        container('trivy') {
+                            echo "Scanning the code..."
+
+                            sh '''
+                                trivy --version
+                                trivy fs .
+                            '''
+                        }
                     }
                 }
             )
