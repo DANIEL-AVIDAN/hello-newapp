@@ -23,14 +23,24 @@ podTemplate(containers: [
           }
         } // end chackout
 
-        stage('build') {
-            container('docker') {
-              echo "Building docker image..."
-            //   sh "docker build -t danielavidan/${appname}:${apptag} ."
-              dockerImage = docker.build("danielavidan/${appname}:${apptag}")
+        stage('Parallel Build & SonarQube') {
+            parallel {
+                stage('build') {
+                    container('docker') {
+                    echo "Building docker image..."
+                    dockerImage = docker.build("danielavidan/${appname}:${apptag}")
 
+                    }
+                } 
+                stage('codeScan') {
+                    steps {
+                        script {
+                            echo "Scanning the code..."
+                        }
+                    }
+                }
             }
-        } //end build
+        }
 
      stage('push') {
             container('docker') {
