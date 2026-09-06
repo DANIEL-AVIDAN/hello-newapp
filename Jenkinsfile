@@ -6,8 +6,10 @@ def apptag = "${env.BUILD_NUMBER}"
 podTemplate(containers: [
       containerTemplate(name: 'jnlp', image: 'jenkins/inbound-agent', ttyEnabled: true),
       containerTemplate(name: 'docker', image: 'docker:dind', command: 'cat', ttyEnabled: true, privileged: true)
-  ])
-  {
+  ]), 
+  volumes: [
+    emptyDirVolume(mountPath: '/var/lib/docker', memory: false) // Q: Why do we need this volume?
+  ]){
     node(POD_LABEL) {
         stage('chackout') {
             container('jnlp') {
