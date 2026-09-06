@@ -39,11 +39,17 @@ podTemplate(containers: [
                     stage('codeScan') {
                         container('trivy') {
                             echo "Scanning the code..."
-
                             sh '''
-                                trivy --version
-                                trivy fs .
+                                trivy fs \
+                                    --format json \
+                                    --output trivy-report.json \
+                                    .
                             '''
+
+                            archiveArtifacts(
+                                artifacts: 'trivy-report.json',
+                                fingerprint: true
+                            )
                         }
                     }
                 }
