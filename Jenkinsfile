@@ -27,7 +27,7 @@ podTemplate(containers: [
             container('docker') {
               echo "Building docker image..."
             //   sh "docker build -t danielavidan/${appname}:${apptag} ."
-              dockerImage = docker.build("${appimage}:${apptag}")
+              dockerImage = docker.build("danielavidan/${appimage}:${apptag}")
 
             }
         } //end build
