@@ -31,5 +31,16 @@ podTemplate(containers: [
 
             }
         } //end build
+
+     stage('push') {
+            container('docker') {
+              script {
+                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
+                  dockerImage.push()
+                }
+              }
+            }
+        } //end push
+
     }
 }
