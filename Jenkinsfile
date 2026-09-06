@@ -6,7 +6,14 @@ def apptag = "${env.BUILD_NUMBER}"
 podTemplate(containers: [
       containerTemplate(name: 'jnlp', image: 'jenkins/inbound-agent', ttyEnabled: true),
       containerTemplate(name: 'docker', image: 'docker:dind', command: 'cat', ttyEnabled: true, privileged: true)
-  ])
+  ],
+      // <<< שינוי 2: הוספנו volume ל-Docker daemon
+    volumes: [
+        emptyDirVolume(
+            mountPath: '/var/lib/docker',
+            memory: false
+        )
+    ])
   {
     node(POD_LABEL) {
         stage('chackout') {
